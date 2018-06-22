@@ -34,51 +34,61 @@ class Amitem_FilterList_Widget extends WP_Widget{
         $results = $amitemobj->list_results_values($_GET['keywords'],$searchin,$_GET['location']);
         //echo '<div class="am_search_result">';
         $count =0;
-        foreach($results as $result){
-            $thumb = '';
-            $thumb =   wp_get_attachment_url( get_post_thumbnail_id($result->ID) );
-            //$thumb = get_the_post_thumbnail( $result->ID,'thumbnail');
-            if(!$thumb) $thumb = WP_PLUGIN_URL.'/am-item/admin/icon.png';
-            $otherinfo = get_post_meta($result->ID, '_amitem_details_meta_key', true);
-            $thumb = '<img src="'.$thumb.'" width="300" height="200" sizes="(max-width: 300px) 100vw, 300px" >';
+        //check if empty results
+        if(empty($result)){
             ?>
             <div class="panel-layout am_search_result">
-                <div class="panel-grid panel-has-style">
-                    <div class="sd-container hoverable panel-row-style">
-                        <div class="panel-grid-cell">
-                            <div class="amitems col-md-12">
-                                <a href="<?php echo $instance['lipage'].'?ref='.$otherinfo['ref']; ?>" title="">
-                                    <article class="box">
-                                        <strong>
-                                        <?php echo ($otherinfo['isverified'] ? '<label class="verified">VERIFIED</label>' :'' );?>
-                                        </strong>
-                                        <figure class="animated fadeInLeft" data-animation-type="fadeInLeft" data-animation-duration="1" style="animation-duration: 1s; visibility: visible;">
-                                            <?php echo $thumb;?>
-                                        </figure>
-                                        <div class="details">
-                                            <h4><?php echo $result->post_title;?></h4>
-                                            <div class="row">
-                                                <div class="pricerange-group col-md-12">
-                                                <div class="pricerange-label col-md-2"><span class="smalldesc">Price Range :</span><br></div>
-                                                    <?php
-                                                    for($a=$otherinfo['pricerange']; $a>0; $a-- ){
-                                                        echo ' <div class="pricerange-border col-md-1" ></div>';
-                                                    }
-                                                    ?>
+                <div class="noresults"><h3>Sorry! No result found. </h3></div>
+            </div>
+            <?php
+        }else{
+            foreach($results as $result){
+                $thumb = '';
+                $thumb =   wp_get_attachment_url( get_post_thumbnail_id($result->ID) );
+                //$thumb = get_the_post_thumbnail( $result->ID,'thumbnail');
+                if(!$thumb) $thumb = WP_PLUGIN_URL.'/am-item/admin/icon.png';
+                $otherinfo = get_post_meta($result->ID, '_amitem_details_meta_key', true);
+                $thumb = '<img src="'.$thumb.'" width="300" height="200" sizes="(max-width: 300px) 100vw, 300px" >';
+                ?>
+                <div class="panel-layout am_search_result">
+                    <div class="panel-grid panel-has-style">
+                        <div class="sd-container hoverable panel-row-style">
+                            <div class="panel-grid-cell">
+                                <div class="amitems col-md-12">
+                                    <a href="<?php echo $instance['lipage'].'?ref='.$otherinfo['ref']; ?>" title="">
+                                        <article class="box">
+                                            <strong>
+                                            <?php echo ($otherinfo['isverified'] ? '<label class="verified">VERIFIED</label>' :'' );?>
+                                            </strong>
+                                            <figure class="animated fadeInLeft" data-animation-type="fadeInLeft" data-animation-duration="1" style="animation-duration: 1s; visibility: visible;">
+                                                <?php echo $thumb;?>
+                                            </figure>
+                                            <div class="details">
+                                                <h4><?php echo $result->post_title;?></h4>
+                                                <div class="row">
+                                                    <div class="pricerange-group col-md-12">
+                                                    <div class="pricerange-label col-md-2"><span class="smalldesc">Price Range :</span><br></div>
+                                                        <?php
+                                                        for($a=$otherinfo['pricerange']; $a>0; $a-- ){
+                                                            echo ' <div class="pricerange-border col-md-1" ></div>';
+                                                        }
+                                                        ?>
+                                                    </div>
+                                                <div class="col-md-12"><span class="smalldesc">City/Municipality : <?php echo $otherinfo['loccity'].' '.$otherinfo['locprovince']; ?></span></div>
+                                                <div class="col-md-12"><p class="shortdesc"><?php echo $otherinfo['shortdesc'];?></p></div>
                                                 </div>
-                                            <div class="col-md-12"><span class="smalldesc">City/Municipality : <?php echo $otherinfo['loccity'].' '.$otherinfo['locprovince']; ?></span></div>
-                                            <div class="col-md-12"><p class="shortdesc"><?php echo $otherinfo['shortdesc'];?></p></div>
                                             </div>
-                                        </div>
-                                    </article>
-                                </a>
+                                        </article>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        <?php
+            <?php
+            }
         }
+        
       //  echo '</div>';
     }
 

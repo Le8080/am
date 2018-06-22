@@ -15,8 +15,6 @@
 }
 .amitems .details{
     text-align: left;
-    margin-left: 292px;
-    margin-top: -207px;
 }
 .amitems  .verified{
     float: right;
@@ -93,13 +91,6 @@
     box-shadow: 0 1px 0 0 #ffffff !important;
 }
 
-
-
-.amitems figure{
-    margin-left: -55px;
-    margin-top: -49px;
-    padding: 23px;
-}
 .search-am{
     background-color: #ffd601;
     border-top-right-radius: 8px !important;
