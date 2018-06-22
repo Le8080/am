@@ -34,11 +34,12 @@ class Amitem_FilterList_Widget extends WP_Widget{
         $results = $amitemobj->list_results_values($_GET['keywords'],$searchin,$_GET['location']);
         //echo '<div class="am_search_result">';
         $count =0;
-        //check if empty results
         if(empty($results)){
             ?>
             <div class="panel-layout am_search_result">
-                <div class="noresults"><h3>Sorry! No result found. </h3></div>
+                <div class="noresult found">
+                <h3>Sorry. No results found.</h3>
+                </div>
             </div>
             <?php
         }else{
@@ -48,7 +49,7 @@ class Amitem_FilterList_Widget extends WP_Widget{
                 //$thumb = get_the_post_thumbnail( $result->ID,'thumbnail');
                 if(!$thumb) $thumb = WP_PLUGIN_URL.'/am-item/admin/icon.png';
                 $otherinfo = get_post_meta($result->ID, '_amitem_details_meta_key', true);
-                $thumb = '<img src="'.$thumb.'" width="300" height="200" sizes="(max-width: 300px) 100vw, 300px" >';
+                $thumb = '<img src="'.$thumb.'" width="200" height="200" sizes="(max-width: 300px) 100vw, 300px" >';
                 ?>
                 <div class="panel-layout am_search_result">
                     <div class="panel-grid panel-has-style">
@@ -60,24 +61,28 @@ class Amitem_FilterList_Widget extends WP_Widget{
                                             <strong>
                                             <?php echo ($otherinfo['isverified'] ? '<label class="verified">VERIFIED</label>' :'' );?>
                                             </strong>
-                                            <figure class="animated fadeInLeft" data-animation-type="fadeInLeft" data-animation-duration="1" style="animation-duration: 1s; visibility: visible;">
-                                                <?php echo $thumb;?>
-                                            </figure>
-                                            <div class="details">
-                                                <h4><?php echo $result->post_title;?></h4>
-                                                <div class="row">
-                                                    <div class="pricerange-group col-md-12">
-                                                    <div class="pricerange-label col-md-2"><span class="smalldesc">Price Range :</span><br></div>
-                                                        <?php
-                                                        for($a=$otherinfo['pricerange']; $a>0; $a-- ){
-                                                            echo ' <div class="pricerange-border col-md-1" ></div>';
-                                                        }
-                                                        ?>
-                                                    </div>
-                                                <div class="col-md-12"><span class="smalldesc">City/Municipality : <?php echo $otherinfo['loccity'].' '.$otherinfo['locprovince']; ?></span></div>
-                                                <div class="col-md-12"><p class="shortdesc"><?php echo $otherinfo['shortdesc'];?></p></div>
-                                                </div>
+                                            <div class="col-md-4 col-sm-4">
+                                                <figure class="animated fadeInLeft" data-animation-type="fadeInLeft" data-animation-duration="1" style="animation-duration: 1s; visibility: visible;">
+                                                    <?php echo $thumb;?>
+                                                </figure>
                                             </div>
+                                            <div class="col-md-8 col-sm-8">
+                                                <div class="details">
+                                                    <h4><?php echo $result->post_title;?></h4>
+                                                    <div class="row">
+                                                        <div class="pricerange-group col-md-12">
+                                                        <div class="pricerange-label col-md-2"><span class="smalldesc">Price Range :</span><br></div>
+                                                            <?php
+                                                            for($a=$otherinfo['pricerange']; $a>0; $a-- ){
+                                                                echo ' <div class="pricerange-border col-md-1" ></div>';
+                                                            }
+                                                            ?>
+                                                        </div>
+                                                    <div class="col-md-12"><span class="smalldesc">City/Municipality : <?php echo $otherinfo['loccity'].' '.$otherinfo['locprovince']; ?></span></div>
+                                                    <div class="col-md-12"><p class="shortdesc"><?php echo $otherinfo['shortdesc'];?></p></div>
+                                                    </div>
+                                                </div>
+                                        </div>
                                         </article>
                                     </a>
                                 </div>
