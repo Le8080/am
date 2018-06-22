@@ -1,0 +1,39 @@
+ShortCOdes
+
+[amitem item="{itemname}" ref="{referencename}"]
+
+ref is not required as along as there's a ref on url parameter
+
+ex
+[amitem item="mobilenumber"]
+
+Available item name
+	post_title  (shopname)
+	post_datepost_date
+	post_content
+	post_status
+	post_name
+	featuredimage
+	featuredimageurl
+	mobilenumber
+	phonenumber
+	emailaddress
+	locno
+	locstreet
+	locbarangay
+	loccity
+	locprovince
+	loccountry
+	map
+	website
+	facebook
+	twitter
+	isverified
+	pricerange
+	ref
+	shortdesc
+	tags
+	category
+	
+Tags and category display like this
+	[parenttagname] : Tags Chil

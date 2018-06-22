@@ -1,0 +1,111 @@
+.amitem-search .search-field{
+    line-height: 29px;
+}
+/* .am_search_result .amitems{
+    padding-bottom: 16px;
+    border: 1px solid #dcd6d65e;
+    margin-bottom: 11px;
+    box-shadow: 3px 2px 4px #b7aeae61;
+} */
+.am_search_result{
+    padding-bottom: 10px;
+}
+.amitems figure{
+    text-align: left !important;
+}
+.amitems .details{
+    text-align: left;
+    margin-left: 292px;
+    margin-top: -207px;
+}
+.amitems  .verified{
+    float: right;
+    margin: 2px;
+    background-color: #ffD600;
+    padding: 5px;
+    color: #797979;
+    font-size: 11px;
+    margin-top: 31px;
+}
+.amitems .unverified{
+    float: right;
+    margin: 2px;
+    background-color: #9e9e9e;
+    padding: 5px;
+    color: #797979;
+    font-size: 11px;
+}
+.amitems .smalldesc{
+    font-size: 11px;
+    color: #828282;
+}
+.amitems .shortdesc{
+    font-size: 14px;
+    color: black;
+}
+
+.pricerange-border{
+    background-color: #ffD600;
+    height: 3px;
+    margin-right: 5px;
+    width: 6px !important;
+}
+.pricerange-progress{
+    height: 6px;
+    width: 20%;
+    margin-top: -2px;
+    background-color: #ffD600;
+    position: relative;
+    right: 17px;
+}
+.pricerange-label{
+    position:  relative;
+    bottom:  12px;
+    right: 14px;
+}
+.pricerange-group{
+    bottom: -15px;
+}
+/* .amitemsearch{
+    color: black !important;
+    background: none !important;
+    border: none !important;
+    border-bottom: 1px solid !important;
+    border-radius: 0px !important;
+    border-bottom-color: #ffbc00 !important;
+    height :48px;
+} */
+.amitemsearch{
+    color: black !important;
+    background: none !important;
+    border: none !important;
+    border-radius: 0px !important;
+    height :48px;
+}
+#autocomplete.amitemsearch{
+    width: 90%;
+}
+.amitemsearch:focus {
+    outline: none;
+    border: none !important;    
+    border-bottom: 1px solid #ffffff !important;
+    -webkit-box-shadow: 0 1px 0 0 #ffffff !important;
+    box-shadow: 0 1px 0 0 #ffffff !important;
+}
+
+
+
+.amitems figure{
+    margin-left: -55px;
+    margin-top: -49px;
+    padding: 23px;
+}
+.search-am{
+    background-color: #ffd601;
+    border-top-right-radius: 8px !important;
+    border-bottom-right-radius: 7px !important;
+    margin-right: -16px;
+}
+.search-am:focus{
+    background-color: #a7922d;
+}
