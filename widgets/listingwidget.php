@@ -35,7 +35,7 @@ class Amitem_FilterList_Widget extends WP_Widget{
         //echo '<div class="am_search_result">';
         $count =0;
         //check if empty results
-        if(empty($result)){
+        if(empty($results)){
             ?>
             <div class="panel-layout am_search_result">
                 <div class="noresults"><h3>Sorry! No result found. </h3></div>
