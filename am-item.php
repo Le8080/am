@@ -293,6 +293,12 @@ function amitem_shortcode( $atts ) {
         }
         if(!empty(wp_get_post_terms($result['post_id'],'Automeanstag')))
             return $data;
+    }else if($item == 'custompricerange'){
+        $pricerange = '';
+        for($a=$result['pricerange']; $a>0; $a-- ){
+            $pricerange .=  ' <div class="pricerange-border col-md-1" ></div>';
+        }
+        return $pricerange;
     }
     else{ return $result[$item];}
   
