@@ -58,16 +58,16 @@ class Amitem_FilterList_Widget extends WP_Widget{
                                 <div class="amitems col-md-12">
                                     <a href="<?php echo $instance['lipage'].'?ref='.$otherinfo['ref']; ?>" title="">
                                         <article class="box">
-                                            <strong>
-                                            <?php echo ($otherinfo['isverified'] ? '<label class="verified">VERIFIED</label>' :'' );?>
-                                            </strong>
                                             <div class="col-md-4 col-sm-4">
-                                                <figure class="animated fadeInLeft" data-animation-type="fadeInLeft" data-animation-duration="1" style="animation-duration: 1s; visibility: visible;">
+                                                <figure>
                                                     <?php echo $thumb;?>
                                                 </figure>
                                             </div>
                                             <div class="col-md-8 col-sm-8">
                                                 <div class="details">
+                                                <strong>
+                                                <?php echo ($otherinfo['isverified'] ? '<label class="verified">VERIFIED</label>' :'' );?>
+                                                </strong>
                                                     <h4><?php echo $result->post_title;?></h4>
                                                     <div class="row">
                                                         <div class="pricerange-group col-md-12">
