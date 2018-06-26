@@ -112,21 +112,93 @@ function amitem_get_object(){
     $postobj->pricerange = "pricerange";
     $postobj->ref = "ref";
     $postobj->shortdesc = "shortdesc";
+    $postobj->amitem_image = "amitem_image";
     return $postobj;
 }
 function amitem_create_metabox(){
-    $metaboxes =array('amitem_details_metabox');
-    foreach($metaboxes as $metabox){
+    $metaboxes =array('amitem_details_metabox'=>'Automeans Details',
+                     'amitem_gallery_metabox'=>'Automeans Gallery'
+                    );
+    foreach($metaboxes as $metabox=>$am){
         add_meta_box(
             $metabox, //unique id of metabox
-            'Automeans Details', //title of metaboc
+            $am, //title of metaboc
             $metabox,   // callback function
             'amitem', //post type.
             'normal',
             'core' 
         );
     }
+}
+function amitem_gallery_metabox($post){
+    $postdata = get_post_meta($post->ID, '_amitem_gallery_meta_key', true);
+    wp_nonce_field (basename(__FILE__), 'amitem_gallery_metabox_nonce');
+    $image_src = '';
+    
+    $image_id = $postdata['amitem_image'];
+    $image_src = wp_get_attachment_url( $postdata['amitem_image'] );
+    ?>
+    <img id="am_image" src="<?php echo $image_src ?>" style="max-width:100%;" />
+    <input type="hidden" name="amitem_image" id="amitem_image" value="<?php echo $postdata['amitem_image']; ?>" />
+    <p>
+        <a title="<?php esc_attr_e( 'Upload Item Images' ) ?>" href="#" id="set-amitem-image"><?php _e( 'Set Automeans Item image' ) ?></a>
+        <a title="<?php esc_attr_e( 'Remove Item image' ) ?>" href="#" id="remove-amitem-image" style="<?php echo ( ! $image_id ? 'display:none;' : '' ); ?>"><?php _e( 'Remove Automeans item image' ) ?></a>
+    </p>
+    
+    <script type="text/javascript">
+    jQuery(document).ready(function($) {
+        
+        // save the send_to_editor handler function
+        window.send_to_editor_default = window.send_to_editor;
 
+        $('#set-amitem-image').click(function(){
+            
+            // replace the default send_to_editor handler function with our own
+            window.send_to_editor = window.attach_image;
+            tb_show('', 'media-upload.php?post_id=<?php echo $post->ID ?>&amp;type=image&amp;TB_iframe=true');
+            
+            return false;
+        });
+        
+        $('#remove-amitem-image').click(function() {
+            
+            $('#amitem_image').val('');
+            $('img').attr('src', '');
+            $(this).hide();
+            
+            return false;
+        });
+        
+        // handler function which is invoked after the user selects an image from the gallery popup.
+        // this function displays the image and sets the id so it can be persisted to the post meta
+        window.attach_image = function(html) {
+            
+            // turn the returned image html into a hidden image element so we can easily pull the relevant attributes we need
+            $('body').append('<div id="temp_image">' + html + '</div>');
+                
+            var img = $('#temp_image').find('img');
+            
+            imgurl   = img.attr('src');
+            imgclass = img.attr('class');
+            imgid    = parseInt(imgclass.replace(/\D/g, ''), 10);
+
+            $('#amitem_image').val(imgid);
+            $('#remove-amitem-image').show();
+
+            $('img#am_image').attr('src', imgurl);
+            try{tb_remove();}catch(e){};
+            $('#temp_image').remove();
+            
+            // restore the send_to_editor handler function
+            window.send_to_editor = window.send_to_editor_default;
+            
+        }
+
+    });
+    </script>
+
+
+    <?php
 }
 function amitem_details_metabox($post){
     $postdata = get_post_meta($post->ID, '_amitem_details_meta_key', true);
@@ -195,15 +267,20 @@ function amitem_save_metabox()
             $is_valid_none = true;
         }
     }
-    
+ 
     if($is_autosave || $is_revision || $is_valid_none) return;
     $ampost = [];
     $obj = amitem_get_object();
     foreach($obj as $am){
-        $ampost[$am]=$_POST[$am];
+        if($am != 'amitem_image')
+            $ampost[$am]=$_POST[$am];
     }
     if(array_key_exists('ref',$_POST)){
         update_post_meta($post->ID, '_amitem_details_meta_key', $ampost);
+    }
+    if(array_key_exists('amitem_image',$_POST)){
+        update_post_meta($post->ID, '_amitem_gallery_meta_key', array('amitem_image'=>$_POST['amitem_image']));
+
     }
 }   
 function amitem_get_all_object(){
