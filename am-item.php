@@ -202,7 +202,7 @@ function amitem_save_metabox()
     foreach($obj as $am){
         $ampost[$am]=$_POST[$am];
     }
-    if(array_key_exists('isverified',$_POST)){
+    if(array_key_exists('ref',$_POST)){
         update_post_meta($post->ID, '_amitem_details_meta_key', $ampost);
     }
 }   
