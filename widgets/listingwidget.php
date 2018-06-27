@@ -26,6 +26,9 @@ class Amitem_FilterList_Widget extends WP_Widget{
     //output widget content
     public function widget($args, $instance){
         $page = apply_filters( 'widget_page', $instance['lipage'] ); 
+        if(isset($instance['categ'])){
+            $_GET['keywords'] = $instance['categ'];
+        }
         extract($args);
         echo $before_Widget;
         require_once plugin_dir_path( __FILE__ ).'amitem_obj.php';

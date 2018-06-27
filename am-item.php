@@ -346,7 +346,9 @@ function amitem_shortcode( $atts ) {
         $gallery = get_post_meta($result->post_id, '_amitem_gallery_meta_key', true);
         $re = (array)$result;
         $result = array_merge($otherinfo,$re);
-        $result = array_merge($result,$gallery);
+        if(!empty($gallery)){
+            $result = array_merge($result,$gallery);
+        }
     }
     if($item=='featuredimage'){
        return get_the_post_thumbnail($result['post_id'],'thumbnail');
@@ -397,9 +399,14 @@ function amitem_shortcode( $atts ) {
         return $pricerange;
     }else if($item == 'itemgallery'){
         $images = $result['amitem_image'];
-        foreach($images as $img){
-            $image_src .= '<a href="'.wp_get_attachment_url($img).'">'.wp_get_attachment_image($img,'thumbnail').'</a>';
+        if(!empty($images)){
+            foreach($images as $img){
+                $image_src .= '<a href="'.wp_get_attachment_url($img).'">'.wp_get_attachment_image($img,'thumbnail').'</a>';
+            }
+        }else{
+            $image_src  ='No Images';
         }
+
         return $image_src;
     }
     else{ return $result[$item];}
