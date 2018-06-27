@@ -134,15 +134,26 @@ function amitem_gallery_metabox($post){
     $postdata = get_post_meta($post->ID, '_amitem_gallery_meta_key', true);
     wp_nonce_field (basename(__FILE__), 'amitem_gallery_metabox_nonce');
     $image_src = '';
-    
-    $image_id = $postdata['amitem_image'];
-    $image_src = wp_get_attachment_url( $postdata['amitem_image'] );
+    echo "<div class='amitem-images row' >";
+    if(isset($postdata['amitem_image']) && !empty($postdata['amitem_image'])){
+        for($i = 0 ; $i < count($postdata['amitem_image']); $i++){
+            $image_id = $postdata['amitem_image'][$i];
+            if($image_id){
+                $image_src = wp_get_attachment_url( $postdata['amitem_image'][$i] );
+                echo "<div class='amitem$image_id col-md-3'>";
+                echo "<a class='remove-amitem-image' amitemid = '$image_id'><span>x</span></a>";
+                echo "<img src='$image_src' style='max-width:100%;' >";
+                echo "<input type='hidden' name='amitem_image[]' value='$image_id' class='amitem$image_id'>";
+                echo "</div>";
+            }
+        }
+    }
+    echo "</div>";
+    //<img id="am_image" src="php echo $image_src " style="max-width:30%;" >
+    //<input type="hidden" name="amitem_image[]" id="amitem_image" value="php echo $image_src;>" />
     ?>
-    <img id="am_image" src="<?php echo $image_src ?>" style="max-width:100%;" />
-    <input type="hidden" name="amitem_image" id="amitem_image" value="<?php echo $postdata['amitem_image']; ?>" />
     <p>
-        <a title="<?php esc_attr_e( 'Upload Item Images' ) ?>" href="#" id="set-amitem-image"><?php _e( 'Set Automeans Item image' ) ?></a>
-        <a title="<?php esc_attr_e( 'Remove Item image' ) ?>" href="#" id="remove-amitem-image" style="<?php echo ( ! $image_id ? 'display:none;' : '' ); ?>"><?php _e( 'Remove Automeans item image' ) ?></a>
+        <a title="<?php esc_attr_e( 'Upload Item Images' ) ?>" href="#" id="set-amitem-image"><b><span> + </span><?php _e( 'Add Automeans Item Image' ) ?></b></a>
     </p>
     
     <script type="text/javascript">
@@ -160,12 +171,11 @@ function amitem_gallery_metabox($post){
             return false;
         });
         
-        $('#remove-amitem-image').click(function() {
-            
-            $('#amitem_image').val('');
-            $('img').attr('src', '');
-            $(this).hide();
-            
+        $('.remove-amitem-image').click(function() {
+            var amitemid = $(this).attr('amitemid');
+            var amclass = "amitem"+amitemid;
+            $("input:hidden."+amclass).val('');
+            $('.'+amclass).hide();
             return false;
         });
         
@@ -177,15 +187,22 @@ function amitem_gallery_metabox($post){
             $('body').append('<div id="temp_image">' + html + '</div>');
                 
             var img = $('#temp_image').find('img');
-            
             imgurl   = img.attr('src');
             imgclass = img.attr('class');
             imgid    = parseInt(imgclass.replace(/\D/g, ''), 10);
+            $('.amitem-images').append(
+                '<div class="amitem'+imgid+' col-md-3">' +
+                '<a class="remove-amitem-image" amitemid="'+imgid+'"><span>x</span></a>' +
+                '<img src="'+imgurl+'" style="max-width:100%;" >' +
+                '<input type="hidden" name="amitem_image[]" value="'+imgid+'" class="amitem'+imgid+'">'+
+                '</div>'
+            );
 
-            $('#amitem_image').val(imgid);
-            $('#remove-amitem-image').show();
 
-            $('img#am_image').attr('src', imgurl);
+            //$('#amitem_image').val(imgid);
+            //$('#remove-amitem-image').show();
+
+           // $('img#am_image').attr('src', imgurl);
             try{tb_remove();}catch(e){};
             $('#temp_image').remove();
             
@@ -326,8 +343,10 @@ function amitem_shortcode( $atts ) {
     $result = $amitemobj->get_amitem_obj($ref,'ref',1);
     if(!empty($result)){
         $otherinfo = get_post_meta($result->post_id, '_amitem_details_meta_key', true);
+        $gallery = get_post_meta($result->post_id, '_amitem_gallery_meta_key', true);
         $re = (array)$result;
         $result = array_merge($otherinfo,$re);
+        $result = array_merge($result,$gallery);
     }
     if($item=='featuredimage'){
        return get_the_post_thumbnail($result['post_id'],'thumbnail');
@@ -376,6 +395,12 @@ function amitem_shortcode( $atts ) {
             $pricerange .=  ' <div class="pricerange-border col-md-1" ></div>';
         }
         return $pricerange;
+    }else if($item == 'itemgallery'){
+        $images = $result['amitem_image'];
+        foreach($images as $img){
+            $image_src .= '<a href="'.wp_get_attachment_url($img).'">'.wp_get_attachment_image($img,'thumbnail').'</a>';
+        }
+        return $image_src;
     }
     else{ return $result[$item];}
   
