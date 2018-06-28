@@ -401,7 +401,7 @@ function amitem_shortcode( $atts ) {
         $images = $result['amitem_image'];
         if(!empty($images)){
             foreach($images as $img){
-                $image_src .= '<a href="'.wp_get_attachment_url($img).'">'.wp_get_attachment_image($img,'thumbnail').'</a>';
+                $image_src .= '<a href="'.wp_get_attachment_url($img).'" data-lightbox="'.$result['ref'].'">'.wp_get_attachment_image($img,'thumbnail').'</a>';
             }
         }else{
             $image_src  ='No Images';
